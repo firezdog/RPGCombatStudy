@@ -4,14 +4,17 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMesh))]
+[RequireComponent(typeof(Animator))]
 public class PlayerController : MonoBehaviour
 {
     NavMeshAgent agent;
+    Animator animator;
 
     // Start is called before the first frame update
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -21,6 +24,7 @@ public class PlayerController : MonoBehaviour
 		{
             MoveToClick();
 		}
+        UpdateAnimator();
     }
 
     void MoveToClick()
@@ -29,5 +33,12 @@ public class PlayerController : MonoBehaviour
         RaycastHit hit;
         Physics.Raycast(worldIntersection, out hit);
         agent.destination = hit.point;
+	}
+
+    void UpdateAnimator()
+	{
+        Vector3 agentVelocity = agent.velocity;
+        Vector3 localVelocity = transform.InverseTransformDirection(agentVelocity);
+        animator.SetFloat("Forward", localVelocity.z);
 	}
 }

@@ -1,0 +1,10 @@
+Attack should take priority over Move
+Cursor affordance (cursor shows whether we will attack or move)
+Undesirable: moving to capsule when trying to attack
+    one comes right after another in update
+Solution: one Interact method tells us whether it succeeded and if so we don't go to the next
+bool InteractWith
+return early or continue with chain
+InteractWithCombat will return true if it finds a combat target at all (whether we clicked or not)
+otherwise return false
+Also do for InteractWithMove (if we clicked somewhere that is not on the world e.g.)

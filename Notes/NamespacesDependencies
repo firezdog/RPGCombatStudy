@@ -1,0 +1,11 @@
+Use namespaces to manage dependencies
+Dependent scripts need to change if the scripts they depend on change
+Avoid cycles where A depends on B depends on C depends on
+    Cycles can affect everything in the cycle
+Layering to avoid cycles (higher layers depend on lower layers) -- the leaves are most stable
+Cohesion -- how much different elements relate to each other in a namespaces
+    Greater cohesion at cost of complexity
+Put PlayerController in RPG.Control namespace
+FollowCamera -- RPG.Core
+Mover -- RPG.Movement
+control module will use movement module (dependency)

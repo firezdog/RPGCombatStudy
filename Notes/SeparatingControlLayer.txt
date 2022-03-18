@@ -1,0 +1,8 @@
+Create "Enemy" (capsule) and prefab ()
+On click walk to enemy and start hacking
+Organization of scripts -- Movement script + Player Controller (control layer)
+Player controller drives movement and combat
+Can be swapped out for enemy controller (sep. of concerns)
+Movement class -- interface = move to destination
+Create MoveTo(Vector3) as public in a Mover class
+PlayerController will call MoveTo now (Control script) and do the raycast

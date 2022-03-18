@@ -1,0 +1,16 @@
+Goal -- clicking on enemy capsule produces message
+We want to add combat component that is activated by clicking on enemy
+Fighter.cs (in RPG.Combat)
+public void Attack w/ log message currently
+CombatTarget.cs (RPG.Combat) -- placeholder for enemy capsule
+
+Currently PlayerController is only doing movement stuff -- we should extra this to InteractWithMovement
+Then add InteractWithCombat
+    raycast -- but what if the capsule is behind a tree? We should still attack it...
+    Physics.RaycastAll (list of hit results)
+    input is the same ray from cursor (from GetMouseRay method)
+    foreach to see if any hit got the enemy
+        Fighter.Attack if you find a CombatTarget
+        GetComponent<CombatTarget> (add namespace)
+            notice controller is getting heavier!
+        call attack (add CombatTarget arg) if the mouse button is down

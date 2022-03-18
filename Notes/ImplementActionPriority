@@ -8,3 +8,6 @@ return early or continue with chain
 InteractWithCombat will return true if it finds a combat target at all (whether we clicked or not)
 otherwise return false
 Also do for InteractWithMove (if we clicked somewhere that is not on the world e.g.)
+How do we do this checking whether the mouse button is held down?
+    put it in MoveToCursor
+    calls MoveTo and returns true (we return true if there's a raycast hit)

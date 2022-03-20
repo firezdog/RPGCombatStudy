@@ -1,13 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
+
 using UnityEngine;
 
-public class FollowCam : MonoBehaviour
-{
-    public Transform player;
-
-    void LateUpdate()
+namespace RPG.Core {
+    public class FollowCam : MonoBehaviour
     {
-        transform.position = player.position;
+        public Transform player;
+
+        void LateUpdate()
+        {
+            transform.position = player.position;
+        }
     }
 }

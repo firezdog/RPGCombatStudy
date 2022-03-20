@@ -1,44 +1,50 @@
 using System.Collections;
 using System.Collections.Generic;
+
 using UnityEngine;
 using UnityEngine.AI;
 
-[RequireComponent(typeof(NavMesh))]
-[RequireComponent(typeof(Animator))]
-public class PlayerController : MonoBehaviour
+using RPG.Movement;
+
+namespace RPG.Control
 {
-    NavMeshAgent agent;
-    Animator animator;
-
-    // Start is called before the first frame update
-    void Start()
+    [RequireComponent(typeof(PlayerMover))]
+    public class PlayerController : MonoBehaviour
     {
-        agent = GetComponent<NavMeshAgent>();
-        animator = GetComponent<Animator>();
+		PlayerMover playerMover;
+
+		// Start is called before the first frame update
+		void Start()
+        {
+            playerMover = GetComponent<PlayerMover>();
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+            if (InteractWithMovement()) { return; }
+        }
+
+        bool InteractWithMovement()
+        {
+            bool hasInteraction = false;
+            if (Input.GetMouseButton(0))
+            {
+                // it's more efficient to only do the raycast if the player clicks the mouse!
+                Ray worldIntersection = GetMouseRay();
+                bool hasDestination = Physics.Raycast(worldIntersection, out RaycastHit hit);
+                if (hasDestination)
+				{
+                    playerMover.MoveTo(hit.point);
+                    hasInteraction = true;
+				}
+            }
+            return hasInteraction;
+        }
+
+        static Ray GetMouseRay()
+        {
+            return Camera.main.ScreenPointToRay(Input.mousePosition);
+        }
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetMouseButton(0))
-		{
-            MoveToClick();
-		}
-        UpdateAnimator();
-    }
-
-    void MoveToClick()
-	{
-        Ray worldIntersection = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-        Physics.Raycast(worldIntersection, out hit);
-        agent.destination = hit.point;
-	}
-
-    void UpdateAnimator()
-	{
-        Vector3 agentVelocity = agent.velocity;
-        Vector3 localVelocity = transform.InverseTransformDirection(agentVelocity);
-        animator.SetFloat("Forward", localVelocity.z);
-	}
 }

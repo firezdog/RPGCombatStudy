@@ -5,42 +5,64 @@ using UnityEngine;
 using UnityEngine.AI;
 
 using RPG.Movement;
+using RPG.Combat;
 
 namespace RPG.Control
 {
     [RequireComponent(typeof(PlayerMover))]
+    [RequireComponent(typeof(CombatFighter))]
     public class PlayerController : MonoBehaviour
     {
 		PlayerMover playerMover;
+		CombatFighter playerFighter;
 
 		// Start is called before the first frame update
 		void Start()
         {
             playerMover = GetComponent<PlayerMover>();
+            playerFighter = GetComponent<CombatFighter>();
         }
 
         // Update is called once per frame
         void Update()
         {
+            if (InteractWithCombat()) { return; }
             if (InteractWithMovement()) { return; }
         }
 
         bool InteractWithMovement()
         {
-            bool hasInteraction = false;
-            if (Input.GetMouseButton(0))
+            Ray worldIntersection = GetMouseRay();
+            bool hasHit = Physics.Raycast(worldIntersection, out RaycastHit hit);
+            if (hasHit)
             {
-                // it's more efficient to only do the raycast if the player clicks the mouse!
-                Ray worldIntersection = GetMouseRay();
-                bool hasDestination = Physics.Raycast(worldIntersection, out RaycastHit hit);
-                if (hasDestination)
+                if (Input.GetMouseButton(0))
 				{
                     playerMover.MoveTo(hit.point);
-                    hasInteraction = true;
 				}
-            }
-            return hasInteraction;
+                return true;
+			}
+            return false;
         }
+
+        bool InteractWithCombat()
+		{
+            Ray worldIntersection = GetMouseRay();
+            RaycastHit[] hits = Physics.RaycastAll(worldIntersection);
+            foreach (RaycastHit hit in hits)
+			{
+                CombatTarget target = hit.transform.GetComponent<CombatTarget>();
+                if (target == null) { continue; }
+
+                if (Input.GetMouseButtonDown(0))
+				{
+                    playerFighter.Fight();
+				}
+
+                return true;
+			}
+            return false;
+		}
 
         static Ray GetMouseRay()
         {
